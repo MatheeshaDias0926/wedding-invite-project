@@ -84,173 +84,19 @@ function createParticles() {
 }
 
 /* ========================================================================
-   AMBIENT MUSIC (Web Audio API — realistic romantic pad)
+   AMBIENT MUSIC (Ed Sheeran - Perfect)
    ======================================================================== */
 function initAmbientMusic() {
     const toggleBtn = document.getElementById('music-toggle');
     const iconOn = document.getElementById('music-icon-on');
     const iconOff = document.getElementById('music-icon-off');
 
-    let audioCtx = null;
+    let audio = new Audio('images/perfect.mp3');
+    audio.loop = true;
     let isPlaying = false;
-    let masterGain = null;
-    let nodes = [];
-
-    function createReverbImpulse(ctx, duration, decay) {
-        const rate = ctx.sampleRate;
-        const length = rate * duration;
-        const impulse = ctx.createBuffer(2, length, rate);
-        for (let ch = 0; ch < 2; ch++) {
-            const data = impulse.getChannelData(ch);
-            for (let i = 0; i < length; i++) {
-                data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay);
-            }
-        }
-        return impulse;
-    }
-
-    function createAmbientPad() {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-        masterGain = audioCtx.createGain();
-        masterGain.gain.value = 0;
-
-        // Reverb for spacious, cathedral-like sound
-        const convolver = audioCtx.createConvolver();
-        convolver.buffer = createReverbImpulse(audioCtx, 4, 2.5);
-
-        const reverbGain = audioCtx.createGain();
-        reverbGain.gain.value = 0.4;
-
-        const dryGain = audioCtx.createGain();
-        dryGain.gain.value = 0.6;
-
-        // Warm low-pass filter on everything
-        const warmFilter = audioCtx.createBiquadFilter();
-        warmFilter.type = 'lowpass';
-        warmFilter.frequency.value = 900;
-        warmFilter.Q.value = 0.5;
-
-        // Romantic Cmaj9 chord voicing: C2, E3, G3, B3, C4, D4, G4
-        const voices = [
-            { freq: 65.41,  type: 'sine',     vol: 0.018 },  // C2 — deep root
-            { freq: 130.81, type: 'sine',     vol: 0.014 },  // C3 — root
-            { freq: 164.81, type: 'sine',     vol: 0.010 },  // E3 — major third
-            { freq: 196.00, type: 'sine',     vol: 0.009 },  // G3 — fifth
-            { freq: 246.94, type: 'triangle', vol: 0.005 },  // B3 — major seventh
-            { freq: 261.63, type: 'sine',     vol: 0.006 },  // C4 — octave
-            { freq: 293.66, type: 'sine',     vol: 0.004 },  // D4 — ninth
-            { freq: 392.00, type: 'triangle', vol: 0.003 },  // G4 — high fifth
-        ];
-
-        // Mixing bus for oscillators
-        const oscBus = audioCtx.createGain();
-        oscBus.gain.value = 1;
-
-        voices.forEach((v, i) => {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-
-            osc.type = v.type;
-            osc.frequency.value = v.freq;
-
-            // Each voice has its own gentle pitch drift (detuning)
-            const lfo = audioCtx.createOscillator();
-            const lfoGain = audioCtx.createGain();
-            lfo.type = 'sine';
-            lfo.frequency.value = 0.03 + Math.random() * 0.06;
-            lfoGain.gain.value = 0.15 + Math.random() * 0.15;
-            lfo.connect(lfoGain);
-            lfoGain.connect(osc.frequency);
-            lfo.start();
-
-            // Gentle volume breathing per voice
-            const breathLfo = audioCtx.createOscillator();
-            const breathGain = audioCtx.createGain();
-            breathLfo.type = 'sine';
-            breathLfo.frequency.value = 0.06 + Math.random() * 0.08;
-            breathGain.gain.value = v.vol * 0.3;
-            breathLfo.connect(breathGain);
-            breathGain.connect(gain.gain);
-            breathLfo.start();
-
-            gain.gain.value = v.vol;
-
-            osc.connect(gain);
-            gain.connect(oscBus);
-            osc.start();
-
-            nodes.push(osc, lfo, breathLfo);
-        });
-
-        // Soft filtered noise — like vinyl warmth
-        const bufferSize = audioCtx.sampleRate * 3;
-        const noiseBuffer = audioCtx.createBuffer(2, bufferSize, audioCtx.sampleRate);
-        for (let ch = 0; ch < 2; ch++) {
-            const channelData = noiseBuffer.getChannelData(ch);
-            for (let i = 0; i < bufferSize; i++) {
-                channelData[i] = (Math.random() * 2 - 1) * 0.004;
-            }
-        }
-        const noiseSource = audioCtx.createBufferSource();
-        noiseSource.buffer = noiseBuffer;
-        noiseSource.loop = true;
-
-        const noiseFilter = audioCtx.createBiquadFilter();
-        noiseFilter.type = 'lowpass';
-        noiseFilter.frequency.value = 350;
-
-        const noiseGain = audioCtx.createGain();
-        noiseGain.gain.value = 0.12;
-
-        noiseSource.connect(noiseFilter);
-        noiseFilter.connect(noiseGain);
-        noiseGain.connect(oscBus);
-        noiseSource.start();
-        nodes.push(noiseSource);
-
-        // Delicate high shimmer — very quiet high harmonics
-        const shimmer = audioCtx.createOscillator();
-        const shimmerGain = audioCtx.createGain();
-        shimmer.type = 'sine';
-        shimmer.frequency.value = 523.25; // C5
-        shimmerGain.gain.value = 0.0015;
-
-        const shimmerLfo = audioCtx.createOscillator();
-        const shimmerLfoGain = audioCtx.createGain();
-        shimmerLfo.type = 'sine';
-        shimmerLfo.frequency.value = 0.04;
-        shimmerLfoGain.gain.value = 0.0008;
-        shimmerLfo.connect(shimmerLfoGain);
-        shimmerLfoGain.connect(shimmerGain.gain);
-        shimmerLfo.start();
-
-        shimmer.connect(shimmerGain);
-        shimmerGain.connect(oscBus);
-        shimmer.start();
-        nodes.push(shimmer, shimmerLfo);
-
-        // Route: oscBus → warmFilter → (dry + reverb) → master
-        oscBus.connect(warmFilter);
-        warmFilter.connect(dryGain);
-        warmFilter.connect(convolver);
-        convolver.connect(reverbGain);
-        dryGain.connect(masterGain);
-        reverbGain.connect(masterGain);
-        masterGain.connect(audioCtx.destination);
-
-        return masterGain;
-    }
 
     function startMusic() {
-        if (!audioCtx) {
-            masterGain = createAmbientPad();
-        } else {
-            audioCtx.resume();
-        }
-        // Very gentle 5-second fade in
-        masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
-        masterGain.gain.linearRampToValueAtTime(1, audioCtx.currentTime + 5);
+        audio.play().catch(e => console.log('Audio play failed:', e));
         isPlaying = true;
         iconOn.style.display = 'block';
         iconOff.style.display = 'none';
@@ -258,10 +104,7 @@ function initAmbientMusic() {
     }
 
     function stopMusic() {
-        if (masterGain && audioCtx) {
-            masterGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 2);
-            setTimeout(() => audioCtx.suspend(), 2100);
-        }
+        audio.pause();
         isPlaying = false;
         iconOn.style.display = 'none';
         iconOff.style.display = 'block';
@@ -278,7 +121,11 @@ function initAmbientMusic() {
     });
 
     // Expose startMusic globally so the seal button can trigger it
-    window.startAmbientMusic = startMusic;
+    window.startAmbientMusic = () => {
+        if (!isPlaying) {
+            startMusic();
+        }
+    };
 }
 
 /* ========================================================================
