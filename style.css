@@ -459,9 +459,9 @@ body::before {
 }
 
 .elegant-divider {
-    width: 140px;
+    width: 250px;
     max-width: 80%;
-    margin: 15px auto;
+    margin: 30px auto;
     display: block;
     opacity: 0.9;
 }
@@ -1519,8 +1519,19 @@ body::before {
     height: 350px;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: var(--shadow-card);
-    border: 3px solid var(--white);
+    padding: 4px;
+    background: var(--text-gold);
+    box-shadow: 0 10px 30px rgba(180, 154, 110, 0.2);
+}
+
+.map-wrapper iframe {
+    border-radius: 8px;
+    filter: sepia(0.5) hue-rotate(-15deg) contrast(0.95) opacity(0.9);
+    transition: all 0.5s ease;
+}
+
+.map-wrapper:hover iframe {
+    filter: sepia(0) hue-rotate(0) contrast(1) opacity(1);
 }
 
 /* ========================================================================
@@ -1573,19 +1584,24 @@ body::before {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: #25D366;
-    color: white;
-    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid var(--text-gold);
+    color: var(--text-gold);
+    padding: 8px 16px;
     border-radius: 25px;
     font-family: var(--font-sans);
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     text-decoration: none;
-    transition: transform 0.2s, background 0.2s;
+    transition: all 0.3s ease;
 }
 
 .contact-whatsapp:hover {
-    background: #128C7E;
+    background: var(--text-gold);
+    color: var(--white);
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(180, 154, 110, 0.2);
 }
 
 /* ========================================================================
