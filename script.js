@@ -20,31 +20,67 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ========================================================================
-   INTRO SLIDESHOW
+   INTERACTIVE LETTER INTRO
    ======================================================================== */
 function initIntroSlideshow() {
+    // Keep function name for backward compatibility in init()
     const overlay = document.getElementById('intro-overlay');
-    const introText = document.getElementById('intro-text');
-    const cards = document.querySelectorAll('.intro-card');
-
+    const sealBtn = document.getElementById('intro-seal-btn');
+    
     document.body.classList.add('intro-active');
 
-    // Start stacking animation
-    requestAnimationFrame(() => {
-        cards.forEach(card => card.classList.add('animate'));
-        introText.classList.add('show');
-    });
+    if (!sealBtn) return;
 
-    // After 5 seconds, fade out intro and reveal invitation
-    setTimeout(() => {
-        overlay.classList.add('fade-out');
-        document.body.classList.remove('intro-active');
+    sealBtn.addEventListener('click', () => {
+        // Trigger music on click
+        if (window.startAmbientMusic) {
+            window.startAmbientMusic();
+        }
 
-        // Remove overlay from DOM after transition
+        // Add opening state to trigger door animations and hide content
+        overlay.classList.add('is-opening');
+        createParticles();
+
+        // After doors are fully opened, remove intro-active from body to allow scroll
         setTimeout(() => {
-            overlay.remove();
-        }, 1300);
-    }, 5000);
+            document.body.classList.remove('intro-active');
+            
+            // Fade out the overlay entirely
+            overlay.classList.add('fade-out');
+            
+            // Remove overlay from DOM after fade out transition
+            setTimeout(() => {
+                overlay.remove();
+            }, 1200);
+        }, 1500); // matches CSS transition duration approximately
+    });
+}
+
+function createParticles() {
+    const container = document.getElementById('particles-container');
+    if (!container) return;
+
+    const particleCount = 40;
+    
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        // Random properties
+        const size = Math.random() * 6 + 2; // 2px to 8px
+        const left = Math.random() * 100; // 0% to 100%
+        const animationDuration = Math.random() * 2 + 2; // 2s to 4s
+        const animationDelay = Math.random() * 0.5;
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${left}%`;
+        particle.style.bottom = `-10px`;
+        particle.style.animationDuration = `${animationDuration}s`;
+        particle.style.animationDelay = `${animationDelay}s`;
+        
+        container.appendChild(particle);
+    }
 }
 
 /* ========================================================================
@@ -241,25 +277,8 @@ function initAmbientMusic() {
         }
     });
 
-    // Auto-play music after intro slideshow ends (needs user gesture on most browsers)
-    // We attach a one-time click/touch listener to the document to satisfy autoplay policy
-    function autoStartOnInteraction() {
-        if (!isPlaying) {
-            startMusic();
-        }
-        document.removeEventListener('click', autoStartOnInteraction);
-        document.removeEventListener('touchstart', autoStartOnInteraction);
-    }
-
-    // Try auto-start after intro — if blocked by browser, start on first user interaction
-    setTimeout(() => {
-        try {
-            startMusic();
-        } catch {
-            document.addEventListener('click', autoStartOnInteraction, { once: true });
-            document.addEventListener('touchstart', autoStartOnInteraction, { once: true });
-        }
-    }, 4000);
+    // Expose startMusic globally so the seal button can trigger it
+    window.startAmbientMusic = startMusic;
 }
 
 /* ========================================================================
@@ -592,4 +611,89 @@ function loadAdminData() {
         const el = document.getElementById('footer-info');
         if (el) el.textContent = `${data.weddingDateDisplay} • ${data.receptionVenue}`;
     }
+
+    // --- New Fields ---
+    
+    // Intro & Bride/Groom Details
+    if (data.partner1) {
+        const el = document.getElementById('intro-name1');
+        if (el) el.textContent = data.partner1;
+        
+        const brideEl = document.getElementById('bride-name');
+        if (brideEl) brideEl.textContent = data.partner1;
+        
+        const sealEl = document.getElementById('seal-letters');
+        if (sealEl && data.partner2) {
+            sealEl.textContent = `${data.partner1.charAt(0)}${data.partner2.charAt(0)}`;
+        }
+    }
+    
+    if (data.partner2) {
+        const el = document.getElementById('intro-name2');
+        if (el) el.textContent = data.partner2;
+        
+        const groomEl = document.getElementById('groom-name');
+        if (groomEl) groomEl.textContent = data.partner2;
+    }
+    
+    if (data.weddingDateDisplay) {
+        const el = document.getElementById('intro-date-text');
+        if (el) el.textContent = data.weddingDateDisplay;
+    }
+
+    if (data.brideParents) {
+        const el = document.getElementById('bride-parents');
+        if (el) el.textContent = data.brideParents;
+    }
+
+    if (data.groomParents) {
+        const el = document.getElementById('groom-parents');
+        if (el) el.textContent = data.groomParents;
+    }
+    
+    // Contacts
+    if (data.contact1Name) {
+        const el = document.getElementById('contact-name1');
+        if (el) el.textContent = data.contact1Name;
+    }
+    if (data.contact1Phone) {
+        const el = document.getElementById('contact-number1');
+        if (el) el.textContent = data.contact1Phone;
+        const wa = document.getElementById('contact-wa1');
+        if (wa) {
+            // Remove + or spaces for whatsapp link
+            const cleanPhone = data.contact1Phone.replace(/[\s\+]/g, '');
+            // Simple check if it starts with 0 to replace with 94 for SL
+            const waPhone = cleanPhone.startsWith('0') ? '94' + cleanPhone.substring(1) : cleanPhone;
+            wa.href = `https://wa.me/${waPhone}`;
+        }
+    }
+    
+    if (data.contact2Name) {
+        const el = document.getElementById('contact-name2');
+        if (el) el.textContent = data.contact2Name;
+    }
+    if (data.contact2Phone) {
+        const el = document.getElementById('contact-number2');
+        if (el) el.textContent = data.contact2Phone;
+        const wa = document.getElementById('contact-wa2');
+        if (wa) {
+            const cleanPhone = data.contact2Phone.replace(/[\s\+]/g, '');
+            const waPhone = cleanPhone.startsWith('0') ? '94' + cleanPhone.substring(1) : cleanPhone;
+            wa.href = `https://wa.me/${waPhone}`;
+        }
+    }
+
+    // Map URL
+    if (data.mapEmbedUrl) {
+        const wrapper = document.getElementById('map-wrapper');
+        if (wrapper) {
+            wrapper.innerHTML = `<iframe src="${data.mapEmbedUrl}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+        }
+    }
+
+    // Schedule (if provided in admin)
+    // Here we'll expect schedule HTML or array in data.schedule
+    // Since admin logic is simple right now, we won't fully implement dynamic schedule building 
+    // unless the admin interface is updated for array-based timeline. 
 }

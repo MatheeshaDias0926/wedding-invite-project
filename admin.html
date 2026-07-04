@@ -375,12 +375,22 @@
                 <h2 class="card-title">💍 Couple Details</h2>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="a-partner1">Partner One Name</label>
-                        <input type="text" id="a-partner1" placeholder="e.g. Sarah">
+                        <label for="a-partner1">Partner One Name (Bride)</label>
+                        <input type="text" id="a-partner1" placeholder="e.g. Tharushi">
                     </div>
                     <div class="form-group">
-                        <label for="a-partner2">Partner Two Name</label>
-                        <input type="text" id="a-partner2" placeholder="e.g. James">
+                        <label for="a-partner2">Partner Two Name (Groom)</label>
+                        <input type="text" id="a-partner2" placeholder="e.g. Nishitha">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="a-bride-parents">Bride's Parents</label>
+                        <input type="text" id="a-bride-parents" placeholder="e.g. Mr. & Mrs. Kulasinghe">
+                    </div>
+                    <div class="form-group">
+                        <label for="a-groom-parents">Groom's Parents</label>
+                        <input type="text" id="a-groom-parents" placeholder="e.g. Mr. & Mrs. Gamage">
                     </div>
                 </div>
             </div>
@@ -403,6 +413,11 @@
                 <div class="form-group">
                     <label for="a-hero-venue">Venue (Hero Section)</label>
                     <input type="text" id="a-hero-venue" placeholder="e.g. Colombo, Sri Lanka">
+                </div>
+                <div class="form-group">
+                    <label for="a-map-embed">Location Map Embed URL</label>
+                    <input type="url" id="a-map-embed" placeholder="https://www.google.com/maps/embed?...">
+                    <p class="hint">Src URL from Google Maps embed code</p>
                 </div>
             </div>
 
@@ -475,6 +490,31 @@
                 <div class="form-group">
                     <label for="a-dress-code">Dress Code</label>
                     <input type="text" id="a-dress-code" placeholder="e.g. Black Tie">
+                </div>
+            </div>
+
+            <!-- Contact Details -->
+            <div class="card">
+                <h2 class="card-title">📞 Contacts (WhatsApp)</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="a-contact1-name">Contact 1 Name</label>
+                        <input type="text" id="a-contact1-name" placeholder="e.g. Nishitha">
+                    </div>
+                    <div class="form-group">
+                        <label for="a-contact1-phone">Contact 1 Phone Number</label>
+                        <input type="text" id="a-contact1-phone" placeholder="e.g. 0768310628">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="a-contact2-name">Contact 2 Name</label>
+                        <input type="text" id="a-contact2-name" placeholder="e.g. Tharushi">
+                    </div>
+                    <div class="form-group">
+                        <label for="a-contact2-phone">Contact 2 Phone Number</label>
+                        <input type="text" id="a-contact2-phone" placeholder="e.g. 0711829314">
+                    </div>
                 </div>
             </div>
 
@@ -589,6 +629,13 @@
             'a-hero-image': 'heroImage',
             'a-note-image': 'noteImage',
             'a-celebration-image': 'celebrationImage',
+            'a-bride-parents': 'brideParents',
+            'a-groom-parents': 'groomParents',
+            'a-map-embed': 'mapEmbedUrl',
+            'a-contact1-name': 'contact1Name',
+            'a-contact1-phone': 'contact1Phone',
+            'a-contact2-name': 'contact2Name',
+            'a-contact2-phone': 'contact2Phone',
         };
 
         // Load existing data on page load

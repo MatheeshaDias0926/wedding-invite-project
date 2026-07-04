@@ -12,27 +12,53 @@
 </head>
 <body>
 
-    <!-- ==================== INTRO SLIDESHOW OVERLAY ==================== -->
+    <!-- ==================== INTERACTIVE LETTER INTRO ==================== -->
     <div class="intro-overlay" id="intro-overlay">
-        <div class="intro-stack" id="intro-stack">
-            <div class="intro-card intro-card-1">
-                <img src="images/images-8.jpeg" alt="Our moment together">
-            </div>
-            <div class="intro-card intro-card-2">
-                <img src="images/images-3.jpeg" alt="Our moment together">
-            </div>
-            <div class="intro-card intro-card-3">
-                <img src="images/images-7.jpeg" alt="Our moment together">
-            </div>
-            <div class="intro-card intro-card-4">
-                <img src="images/images-5.jpeg" alt="Our moment together">
-            </div>
-            <div class="intro-card intro-card-5">
-                <img src="images/51451714_1356215891183811_1843002756277731328_n.jpg" alt="Our special moment">
+        
+        <!-- Envelope Doors -->
+        <div class="intro-door left-door" id="left-door">
+            <div class="intro-card-bg"></div>
+            <img src="images/floral_corner.png" class="floral-corner corner-top-left" alt="">
+            <img src="images/floral_corner.png" class="floral-corner corner-bottom-left" alt="">
+        </div>
+        
+        <div class="intro-door right-door" id="right-door">
+            <div class="intro-card-bg"></div>
+            <img src="images/floral_corner.png" class="floral-corner corner-top-right" alt="">
+            <img src="images/floral_corner.png" class="floral-corner corner-bottom-right" alt="">
+        </div>
+
+        <!-- Gold center line when closed -->
+        <div class="card-center-line" id="card-center-line"></div>
+
+        <!-- Envelope Content -->
+        <div class="intro-card-wrapper" id="intro-card-wrapper">
+            <div class="intro-card-content" id="intro-content">
+                <p class="intro-top-text">TOGETHER WITH THEIR FAMILIES</p>
+                <p class="intro-sub-text">you are invited to celebrate the wedding of</p>
+                
+                <div class="intro-names">
+                    <span id="intro-name1">Tharushi</span> <span class="intro-amp">&</span> <span id="intro-name2">Nishitha</span>
+                </div>
+                
+                <img src="images/elegant_divider.png" class="elegant-divider intro-divider" alt="">
+
+                
+                <p class="intro-save-date">SAVE THE DATE</p>
+                <p class="intro-date" id="intro-date-text">July 31, 2026</p>
+                
+                <!-- Wax seal / Open button -->
+                <button class="intro-seal-btn" id="intro-seal-btn" aria-label="Open Invitation">
+                    <div class="seal-ring"></div>
+                    <span class="seal-letters" id="seal-letters">NT</span>
+                </button>
+                <p class="intro-tap-text" id="intro-tap-text">TAP TO OPEN</p>
             </div>
         </div>
-        <p class="intro-text" id="intro-text">Partner One & Partner Two</p>
     </div>
+    
+    <!-- Magical particles container (Moved outside intro so it persists) -->
+    <div class="particles-container" id="particles-container"></div>
 
     <!-- ==================== HERO SECTION ==================== -->
     <section class="hero" id="hero">
@@ -44,12 +70,43 @@
                 <span class="hero-ampersand">&</span>
                 <span class="hero-name" id="hero-name2">Partner Two</span>
             </div>
-            <div class="hero-divider"></div>
+            
+            <img src="images/elegant_divider.png" class="elegant-divider" alt="">
+            
             <p class="hero-date" id="hero-date">Friday, July 31, 2026</p>
             <p class="hero-venue" id="hero-venue">Colombo, Sri Lanka</p>
             <a href="#countdown" class="hero-scroll-arrow" aria-label="Scroll down">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
             </a>
+        </div>
+    </section>
+
+    <!-- ==================== COUPLE DETAILS SECTION ==================== -->
+    <section class="couple-section" id="couple">
+        <div class="section-container">
+            <div class="couple-details-wrapper">
+                
+                <div class="person-details">
+                    <h3 class="person-title">BRIDE</h3>
+                    <h2 class="person-name" id="bride-name">Tharushi</h2>
+                    <p class="person-relation">LOVING DAUGHTER OF</p>
+                    <p class="person-parents" id="bride-parents">Mr. Gamini Kulasinghe and Mrs. Renuka Narangoda</p>
+                </div>
+                
+                <div class="couple-divider">
+                    <div class="divider-line"></div>
+                    <div class="divider-dot"></div>
+                    <div class="divider-line"></div>
+                </div>
+
+                <div class="person-details">
+                    <h3 class="person-title">GROOM</h3>
+                    <h2 class="person-name" id="groom-name">Nishitha</h2>
+                    <p class="person-relation">BELOVED SON OF</p>
+                    <p class="person-parents" id="groom-parents">Mr. Nalaka Gamage and Mrs. Niluka Chathurani</p>
+                </div>
+
+            </div>
         </div>
     </section>
 
@@ -90,8 +147,11 @@
             </div>
             <div class="note-quote">
                 <span class="quote-mark open">"</span>
+                
+                <img src="images/elegant_divider.png" class="elegant-divider" alt="">
+                
                 <p class="note-text" id="note-text">
-                    There are no words to fully express how much it means to have you with us on this day. Thank you for being part of our love story and for sharing in the joy that fills our hearts. We cannot wait to celebrate with you.
+                    There are no words to fully express how much it means to have you with us on our special day. Your love, support, and friendship have shaped our lives in the most beautiful ways. We couldn't imagine starting this new chapter without you by our side.
                 </p>
                 <span class="quote-mark close">"</span>
             </div>
@@ -99,6 +159,41 @@
                 <span class="invited-line-bar"></span>
                 <span class="invited-line-text">You're Invited</span>
                 <span class="invited-line-bar"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SCHEDULE / TIMELINE ==================== -->
+    <section class="schedule-section" id="schedule">
+        <div class="section-container">
+            <p class="section-label">Order of Events</p>
+            <h2 class="schedule-title">Schedule</h2>
+            
+            <div class="timeline" id="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">4:00 PM</div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>Ceremony</h3>
+                        <p>Exchange of vows</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">6:00 PM</div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>Cocktails & Photos</h3>
+                        <p>Drinks and mingling</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">7:00 PM</div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>Reception</h3>
+                        <p>Dinner & Dancing</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -136,6 +231,15 @@
                 </div>
             </div>
             <p class="dress-code"><span class="dress-code-label">Dress Code</span> · <span id="dress-code-value">Black Tie</span></p>
+
+            <!-- Map Preview -->
+            <div class="map-container">
+                <h3 class="map-title">Location Map</h3>
+                <div class="map-wrapper" id="map-wrapper">
+                    <!-- Default map embed (Colombo) -->
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126743.63162589578!2d79.7738029054701!3d6.921833527638012!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo%2C%20Sri%20Lanka!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -170,6 +274,9 @@
         </div>
     </section>
 
+    </section>
+
+
     <!-- ==================== RSVP SECTION ==================== -->
     <section class="rsvp-section" id="rsvp">
         <div class="section-container">
@@ -186,6 +293,32 @@
                 <div class="confirmation-icon">✓</div>
                 <h3 class="confirmation-title" id="confirmation-title">Thank you!</h3>
                 <p class="confirmation-text" id="confirmation-text">Your response has been recorded.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CONTACT SECTION ==================== -->
+    <section class="contact-section" id="contact">
+        <div class="section-container">
+            <h2 class="contact-title" style="font-size: 1.2rem; margin-bottom: 15px; color: var(--text-muted);">Get in touch</h2>
+            <div class="contact-cards" style="gap: 15px;">
+                <div class="contact-card" style="padding: 15px; background: transparent; border: none; box-shadow: none;">
+                    <h3 class="contact-name" id="contact-name1" style="font-size: 1rem; color: var(--text-gold);">Nishitha</h3>
+                    <p class="contact-number" id="contact-number1" style="font-size: 0.8rem; margin-bottom: 8px;">0768310628</p>
+                    <a href="https://wa.me/94768310628" target="_blank" rel="noopener" class="contact-whatsapp" id="contact-wa1" style="padding: 6px 12px; font-size: 0.6rem; opacity: 0.7;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        WhatsApp
+                    </a>
+                </div>
+                
+                <div class="contact-card" style="padding: 15px; background: transparent; border: none; box-shadow: none;">
+                    <h3 class="contact-name" id="contact-name2" style="font-size: 1rem; color: var(--text-gold);">Tharushi</h3>
+                    <p class="contact-number" id="contact-number2" style="font-size: 0.8rem; margin-bottom: 8px;">0711829314</p>
+                    <a href="https://wa.me/94711829314" target="_blank" rel="noopener" class="contact-whatsapp" id="contact-wa2" style="padding: 6px 12px; font-size: 0.6rem; opacity: 0.7;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        WhatsApp
+                    </a>
+                </div>
             </div>
         </div>
     </section>

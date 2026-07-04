@@ -101,120 +101,285 @@ body::before {
 }
 
 /* ========================================================================
-   INTRO SLIDESHOW OVERLAY
+   INTERACTIVE LETTER INTRO (Sri Lankan Western Style)
    ======================================================================== */
 .intro-overlay {
     position: fixed;
     inset: 0;
     z-index: 20000;
-    background: linear-gradient(
-        160deg,
-        #e8ddd0 0%,
-        #f5f0ea 30%,
-        #ece5db 60%,
-        #d6ccbf 100%
-    );
+    background: transparent;
+    perspective: 2000px;
+    pointer-events: auto;
+    overflow: hidden;
+}
+
+.intro-overlay.fade-out {
+    pointer-events: none;
+}
+
+/* The Left and Right Doors */
+.intro-door {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    background: #fdfaf5; /* Cream background */
+    z-index: 1;
+    transition: transform 1.8s cubic-bezier(0.77, 0, 0.175, 1);
+    box-shadow: 0 0 30px rgba(58, 46, 36, 0.15);
+}
+
+.left-door {
+    left: 0;
+    transform-origin: left center;
+}
+
+.right-door {
+    right: 0;
+    transform-origin: right center;
+}
+
+/* Opening Animation */
+.intro-overlay.is-opening .left-door {
+    transform: rotateY(-105deg);
+}
+
+.intro-overlay.is-opening .right-door {
+    transform: rotateY(105deg);
+}
+
+/* Background watermark (using generated mandala) */
+.intro-card-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('images/mandala_watermark.png');
+    background-size: 500px;
+    opacity: 0.15;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+}
+
+.intro-card-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: center;
+    z-index: 10;
 }
 
-.intro-overlay.fade-out {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.intro-stack {
-    position: relative;
-    width: clamp(240px, 55vw, 380px);
-    height: clamp(300px, 68vw, 480px);
-    perspective: 1000px;
-}
-
-.intro-card {
+/* Gold line borders (Legacy removed, replaced with floral illustrations) */
+.floral-corner {
     position: absolute;
+    width: 250px;
+    height: 250px;
+    opacity: 0.95;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.corner-top-left { 
+    top: -10px; 
+    left: -10px; 
+}
+
+.corner-bottom-left { 
+    bottom: -10px; 
+    left: -10px; 
+    transform: rotate(-90deg); 
+}
+
+.corner-top-right { 
+    top: -10px; 
+    right: -10px; 
+    transform: rotate(90deg);
+}
+
+.corner-bottom-right { 
+    bottom: -10px; 
+    right: -10px; 
+    transform: rotate(180deg);
+}
+
+/* The center line joining the doors */
+.card-center-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background: linear-gradient(to bottom, transparent, rgba(180, 154, 110, 0.4), transparent);
+    z-index: 5;
+    transform: translateX(-50%);
+    transition: opacity 0.4s ease;
+}
+.card-center-line::before, .card-center-line::after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    width: 6px;
+    height: 6px;
+    background: var(--text-gold);
+    transform: rotate(45deg);
+}
+.card-center-line::before { top: 30%; }
+.card-center-line::after { bottom: 30%; }
+
+.intro-overlay.is-opening .card-center-line {
+    opacity: 0;
+}
+
+.intro-card-content {
+    padding: 0 20px;
+    animation: fadeIn 2s ease-out;
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.intro-overlay.is-opening .intro-card-content {
+    opacity: 0;
+    transform: scale(1.1);
+}
+
+
+
+/* Magical Particles */
+.particles-container {
+    position: fixed;
     inset: 0;
-    border-radius: 14px;
+    pointer-events: none;
+    z-index: 15;
     overflow: hidden;
-    border: 3px solid rgba(214, 204, 191, 0.6);
-    box-shadow:
-        0 12px 40px rgba(58, 46, 36, 0.12),
-        0 4px 16px rgba(58, 46, 36, 0.08);
+}
+
+.particle {
+    position: absolute;
+    background: radial-gradient(circle at center, var(--text-gold) 0%, rgba(180, 154, 110, 0) 70%);
+    border-radius: 50%;
     opacity: 0;
-    transform: scale(0.8) rotate(0deg) translateY(40px);
-    transition: none;
-    will-change: transform, opacity;
+    animation: floatUp linear infinite;
 }
 
-.intro-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) scale(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+        transform: translateY(-50px) scale(1);
+    }
+    100% {
+        transform: translateY(-100vh) scale(0.5);
+        opacity: 0;
+    }
 }
 
-/* Smooth stacking animations with gentle cubic-bezier easing */
-.intro-card-1.animate {
-    animation: cardStack1 4.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-.intro-card-2.animate {
-    animation: cardStack2 4.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-.intro-card-3.animate {
-    animation: cardStack3 4.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-.intro-card-4.animate {
-    animation: cardStack4 4.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-.intro-card-5.animate {
-    animation: cardStack5 4.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+.intro-top-text {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--text-gold);
+    text-transform: uppercase;
+    margin-bottom: 24px;
 }
 
-@keyframes cardStack1 {
-    0% { opacity: 0; transform: scale(0.75) rotate(-6deg) translateY(50px); }
-    8% { opacity: 0; }
-    18% { opacity: 1; transform: scale(0.88) rotate(-5deg) translateY(0); }
-    100% { opacity: 1; transform: scale(0.88) rotate(-5deg) translateY(0); }
+.intro-sub-text {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--text-body);
+    margin-bottom: 12px;
 }
 
-@keyframes cardStack2 {
-    0%, 18% { opacity: 0; transform: scale(0.75) rotate(5deg) translateY(50px); }
-    34% { opacity: 1; transform: scale(0.9) rotate(3deg) translateY(-5px); }
-    100% { opacity: 1; transform: scale(0.9) rotate(3deg) translateY(-5px); }
-}
-
-@keyframes cardStack3 {
-    0%, 34% { opacity: 0; transform: scale(0.75) rotate(-4deg) translateY(50px); }
-    50% { opacity: 1; transform: scale(0.92) rotate(-2deg) translateY(-10px); }
-    100% { opacity: 1; transform: scale(0.92) rotate(-2deg) translateY(-10px); }
-}
-
-@keyframes cardStack4 {
-    0%, 50% { opacity: 0; transform: scale(0.75) rotate(4deg) translateY(50px); }
-    66% { opacity: 1; transform: scale(0.95) rotate(1.5deg) translateY(-15px); }
-    100% { opacity: 1; transform: scale(0.95) rotate(1.5deg) translateY(-15px); }
-}
-
-@keyframes cardStack5 {
-    0%, 66% { opacity: 0; transform: scale(0.8) rotate(0deg) translateY(40px); }
-    82% { opacity: 1; transform: scale(1) rotate(0deg) translateY(-20px); }
-    100% { opacity: 1; transform: scale(1) rotate(0deg) translateY(-20px); }
-}
-
-.intro-text {
+.intro-names {
     font-family: var(--font-script);
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
-    color: var(--text-dark);
-    margin-top: 40px;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1) 3s, transform 1s cubic-bezier(0.4, 0, 0.2, 1) 3s;
+    font-size: clamp(3rem, 8vw, 5rem);
+    color: var(--accent-dark);
+    line-height: 1.2;
+    margin-bottom: 40px;
 }
 
-.intro-text.show {
-    opacity: 1;
-    transform: translateY(0);
+.intro-amp {
+    font-family: var(--font-display);
+    font-size: 0.8em;
+    color: var(--text-gold);
+    margin: 0 10px;
+}
+
+.intro-save-date {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--text-gold);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.intro-date {
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    color: var(--text-body);
+    margin-bottom: 40px;
+}
+
+/* The Gold Seal */
+.intro-seal-btn {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffffff, #f0e6d2);
+    border: none;
+    box-shadow: 0 10px 30px rgba(180, 154, 110, 0.3), inset 0 0 10px rgba(180, 154, 110, 0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: pulseGlow 3s infinite;
+}
+
+.intro-seal-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(180, 154, 110, 0.4), inset 0 0 15px rgba(180, 154, 110, 0.3);
+}
+
+.seal-ring {
+    position: absolute;
+    inset: 6px;
+    border-radius: 50%;
+    border: 1px solid rgba(180, 154, 110, 0.6);
+}
+
+.seal-letters {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--accent-dark);
+    letter-spacing: -2px;
+}
+
+.intro-tap-text {
+    font-family: var(--font-sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    color: var(--text-gold);
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 0 0 rgba(180, 154, 110, 0.4); }
+    70% { box-shadow: 0 0 0 20px rgba(180, 154, 110, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(180, 154, 110, 0); }
 }
 
 /* ========================================================================
@@ -291,6 +456,14 @@ body::before {
     font-size: clamp(2rem, 5vw, 3.5rem);
     color: var(--text-gold);
     line-height: 1.4;
+}
+
+.elegant-divider {
+    width: 140px;
+    max-width: 80%;
+    margin: 15px auto;
+    display: block;
+    opacity: 0.9;
 }
 
 .hero-divider {
@@ -1119,6 +1292,303 @@ body::before {
 }
 
 /* ========================================================================
+   COUPLE DETAILS SECTION
+   ======================================================================== */
+.couple-section {
+    padding: var(--section-py) 0;
+    background: var(--white);
+    text-align: center;
+}
+
+.couple-details-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+.person-details {
+    max-width: 400px;
+}
+
+.person-title {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.35em;
+    color: var(--text-gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.person-name {
+    font-family: var(--font-script);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    color: var(--accent-dark);
+    line-height: 1.1;
+    margin-bottom: 16px;
+}
+
+.person-relation {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.person-parents {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    color: var(--text-body);
+}
+
+.couple-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    max-width: 200px;
+}
+
+.divider-line {
+    flex-grow: 1;
+    height: 1px;
+    background: var(--text-gold);
+    opacity: 0.3;
+}
+
+.divider-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--text-gold);
+    border-radius: 50%;
+    transform: rotate(45deg);
+}
+
+@media (min-width: 768px) {
+    .couple-details-wrapper {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: stretch;
+    }
+    
+    .couple-divider {
+        flex-direction: column;
+        width: auto;
+        height: 100%;
+        max-width: none;
+    }
+
+    .divider-line {
+        width: 1px;
+        height: 100px;
+    }
+}
+
+/* ========================================================================
+   SCHEDULE / TIMELINE
+   ======================================================================== */
+.schedule-section {
+    padding: var(--section-py) 0;
+    background: var(--bg-secondary);
+    text-align: center;
+}
+
+.schedule-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    color: var(--accent-dark);
+    margin-bottom: 60px;
+}
+
+.timeline {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 100px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--text-gold);
+    opacity: 0.3;
+}
+
+.timeline-item {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 40px;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-time {
+    width: 80px;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-gold);
+    text-align: right;
+    padding-top: 2px;
+}
+
+.timeline-dot {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    background: var(--bg-secondary);
+    border: 2px solid var(--text-gold);
+    border-radius: 50%;
+    margin: 4px 20px 0 14px;
+    z-index: 2;
+}
+
+.timeline-content {
+    flex: 1;
+    background: var(--white);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-card);
+}
+
+.timeline-content h3 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    color: var(--accent-dark);
+    margin-bottom: 4px;
+}
+
+.timeline-content p {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-body);
+    margin: 0;
+}
+
+@media (max-width: 480px) {
+    .timeline::before {
+        left: 20px;
+    }
+    .timeline-item {
+        flex-direction: column;
+    }
+    .timeline-time {
+        text-align: left;
+        margin-left: 45px;
+        margin-bottom: 10px;
+    }
+    .timeline-dot {
+        position: absolute;
+        left: 14px;
+        top: 26px;
+        margin: 0;
+    }
+    .timeline-content {
+        margin-left: 45px;
+    }
+}
+
+/* ========================================================================
+   LOCATION MAP
+   ======================================================================== */
+.map-container {
+    margin-top: 60px;
+    text-align: center;
+}
+
+.map-title {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--accent-dark);
+    margin-bottom: 24px;
+}
+
+.map-wrapper {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    border: 3px solid var(--white);
+}
+
+/* ========================================================================
+   CONTACT SECTION
+   ======================================================================== */
+.contact-section {
+    padding: var(--section-py) 0;
+    background: var(--bg-secondary);
+    text-align: center;
+}
+
+.contact-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    color: var(--accent-dark);
+    margin-bottom: 50px;
+}
+
+.contact-cards {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.contact-card {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 12px;
+    min-width: 260px;
+    box-shadow: var(--shadow-card);
+}
+
+.contact-name {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--accent-dark);
+    margin-bottom: 8px;
+}
+
+.contact-number {
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    color: var(--text-body);
+    margin-bottom: 20px;
+}
+
+.contact-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #25D366;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.contact-whatsapp:hover {
+    background: #128C7E;
+    transform: translateY(-2px);
+}
+
+/* ========================================================================
    RESPONSIVE
    ======================================================================== */
 @media (max-width: 768px) {
@@ -1155,4 +1625,65 @@ body::before {
         transition-duration: 0.01ms !important;
     }
     html { scroll-behavior: auto; }
+}
+
+/* ========================================================================
+   LOTTIE ANIMATIONS (Florals & Hearts)
+   ======================================================================== */
+
+/* Corner Florals */
+.lottie-corner {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0.9;
+}
+
+.lottie-corner.top-left {
+    top: -20px;
+    left: -20px;
+}
+
+.lottie-corner.top-right {
+    top: -20px;
+    right: -20px;
+    transform: scaleX(-1); /* Flip horizontally */
+}
+
+.lottie-corner.bottom-left {
+    bottom: -20px;
+    left: -20px;
+    transform: scaleY(-1); /* Flip vertically */
+}
+
+.lottie-corner.bottom-right {
+    bottom: -20px;
+    right: -20px;
+    transform: scale(-1, -1); /* Flip both */
+}
+
+/* Hero section specific tweaks */
+.hero-lottie {
+    z-index: 5; /* Above hero overlay, below text */
+    opacity: 0.7;
+    width: 300px;
+    height: 300px;
+}
+
+/* Heart Animations */
+.lottie-heart-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 10px auto;
+    width: 80px;
+    height: 80px;
+    opacity: 0.9;
+}
+
+.lottie-heart {
+    width: 100%;
+    height: 100%;
 }
