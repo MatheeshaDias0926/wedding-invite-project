@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel — Wedding Invitation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Josefin+Sans:wght@300;400&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #1a1714;
+            --bg-card: #242018;
+            --bg-input: #2c261e;
+            --border: #3d3529;
+            --border-focus: #b49a6e;
+            --text: #e8ddd0;
+            --text-muted: #9a8d7f;
+            --text-gold: #b49a6e;
+            --accent: #4a3628;
+            --accent-hover: #5a4638;
+            --danger: #8b3a3a;
+            --success: #3a6b3a;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Cormorant Garamond', serif;
+            --font-sans: 'Josefin Sans', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ── Header ── */
+        .admin-header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .admin-logo {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--text-gold);
+        }
+
+        .admin-logo span {
+            font-family: var(--font-sans);
+            font-size: 0.6rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            display: block;
+            margin-top: 2px;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            font-family: var(--font-sans);
+            font-weight: 300;
+            font-size: 0.65rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--text-gold);
+            color: var(--bg);
+        }
+
+        .btn-primary:hover {
+            background: #c9ad80;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--text-gold);
+            color: var(--text-gold);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: var(--text);
+        }
+
+        .btn-danger:hover {
+            background: #a04444;
+        }
+
+        /* ── Layout ── */
+        .admin-body {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 32px 24px 80px;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 24px;
+        }
+
+        @media (max-width: 900px) {
+            .admin-body { grid-template-columns: 1fr; }
+        }
+
+        /* ── Cards ── */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px 24px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            color: var(--text-gold);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* ── Form ── */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: var(--font-sans);
+            font-weight: 300;
+            font-size: 0.62rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--text);
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px 14px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px rgba(180, 154, 110, 0.12);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group .hint {
+            font-family: var(--font-sans);
+            font-size: 0.55rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            letter-spacing: 0.05em;
+        }
+
+        /* ── RSVP Stats ── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-box {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px 16px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--text-gold);
+            line-height: 1.1;
+        }
+
+        .stat-label {
+            font-family: var(--font-sans);
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        .stat-box.accepted .stat-number { color: #6eb56e; }
+        .stat-box.declined .stat-number { color: #c47070; }
+
+        /* ── Gallery Management ── */
+        .gallery-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .gallery-preview-item {
+            aspect-ratio: 1;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border);
+        }
+
+        .gallery-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-preview-item .remove-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 20px;
+            height: 20px;
+            background: rgba(139, 58, 58, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 0.65rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .gallery-preview-item:hover .remove-btn {
+            opacity: 1;
+        }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--text-gold);
+            border-radius: 8px;
+            padding: 14px 24px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--text-gold);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s;
+            z-index: 200;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* ── Preview link ── */
+        .preview-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--font-sans);
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-gold);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 8px 16px;
+            margin-top: 12px;
+            transition: all 0.3s;
+        }
+
+        .preview-link:hover {
+            border-color: var(--text-gold);
+            background: rgba(180, 154, 110, 0.08);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-family: var(--font-sans);
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover { color: var(--text-gold); }
+    </style>
+</head>
+<body>
+    <!-- ── Header ── -->
+    <header class="admin-header">
+        <div>
+            <div class="admin-logo">
+                Wedding Admin
+                <span>Manage Your Invitation</span>
+            </div>
+        </div>
+        <div class="admin-actions">
+            <a href="index.html" class="back-link">← Back to Invitation</a>
+            <button class="btn btn-primary" id="btn-save" onclick="saveAllData()">Save Changes</button>
+        </div>
+    </header>
+
+    <!-- ── Body ── -->
+    <div class="admin-body">
+        <!-- LEFT COLUMN: Forms -->
+        <div class="admin-main">
+
+            <!-- Couple Details -->
+            <div class="card">
+                <h2 class="card-title">💍 Couple Details</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="a-partner1">Partner One Name</label>
+                        <input type="text" id="a-partner1" placeholder="e.g. Sarah">
+                    </div>
+                    <div class="form-group">
+                        <label for="a-partner2">Partner Two Name</label>
+                        <input type="text" id="a-partner2" placeholder="e.g. James">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date & Location -->
+            <div class="card">
+                <h2 class="card-title">📅 Date & Location</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="a-wedding-datetime">Wedding Date & Time</label>
+                        <input type="datetime-local" id="a-wedding-datetime">
+                        <p class="hint">Used for the countdown timer</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="a-wedding-date-display">Display Date Text</label>
+                        <input type="text" id="a-wedding-date-display" placeholder="e.g. Friday, July 31, 2026">
+                        <p class="hint">Shown on the invitation card</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="a-hero-venue">Venue (Hero Section)</label>
+                    <input type="text" id="a-hero-venue" placeholder="e.g. Colombo, Sri Lanka">
+                </div>
+            </div>
+
+            <!-- Ceremony Details -->
+            <div class="card">
+                <h2 class="card-title">⛪ Ceremony</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="a-ceremony-date">Ceremony Date</label>
+                        <input type="text" id="a-ceremony-date" placeholder="e.g. Friday, July 31, 2026">
+                    </div>
+                    <div class="form-group">
+                        <label for="a-ceremony-time">Ceremony Time</label>
+                        <input type="text" id="a-ceremony-time" placeholder="e.g. 4:00 PM">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="a-ceremony-venue">Ceremony Venue</label>
+                    <input type="text" id="a-ceremony-venue" placeholder="e.g. St. Mary's Church, Colombo">
+                </div>
+                <div class="form-group">
+                    <label for="a-ceremony-address">Ceremony Address</label>
+                    <input type="text" id="a-ceremony-address" placeholder="e.g. Borella, Colombo 08">
+                </div>
+                <div class="form-group">
+                    <label for="a-ceremony-map">Google Maps Link</label>
+                    <input type="url" id="a-ceremony-map" placeholder="https://maps.google.com/...">
+                </div>
+            </div>
+
+            <!-- Reception Details -->
+            <div class="card">
+                <h2 class="card-title">🥂 Reception</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="a-reception-date">Reception Date</label>
+                        <input type="text" id="a-reception-date" placeholder="e.g. Friday, July 31, 2026">
+                    </div>
+                    <div class="form-group">
+                        <label for="a-reception-time">Reception Time</label>
+                        <input type="text" id="a-reception-time" placeholder="e.g. 7:00 PM">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="a-reception-venue">Reception Venue</label>
+                    <input type="text" id="a-reception-venue" placeholder="e.g. The Grand Pavilion, Colombo">
+                </div>
+                <div class="form-group">
+                    <label for="a-reception-address">Reception Address</label>
+                    <input type="text" id="a-reception-address" placeholder="e.g. Galle Face, Colombo 03">
+                </div>
+                <div class="form-group">
+                    <label for="a-reception-map">Google Maps Link</label>
+                    <input type="url" id="a-reception-map" placeholder="https://maps.google.com/...">
+                </div>
+            </div>
+
+            <!-- Personal Note -->
+            <div class="card">
+                <h2 class="card-title">💌 Personal Note</h2>
+                <div class="form-group">
+                    <label for="a-note-text">Note From the Couple</label>
+                    <textarea id="a-note-text" rows="4" placeholder="There are no words to fully express how much it means to have you with us..."></textarea>
+                </div>
+            </div>
+
+            <!-- Dress Code & Other -->
+            <div class="card">
+                <h2 class="card-title">👔 Additional Details</h2>
+                <div class="form-group">
+                    <label for="a-dress-code">Dress Code</label>
+                    <input type="text" id="a-dress-code" placeholder="e.g. Black Tie">
+                </div>
+            </div>
+
+            <!-- Image Management -->
+            <div class="card">
+                <h2 class="card-title">📸 Image Management</h2>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+                    Images are loaded from the <code style="color: var(--text-gold); background: var(--bg-input); padding: 2px 6px; border-radius: 3px;">images/</code> folder in your project root. To change images, add or replace files in that folder and update the filenames below.
+                </p>
+
+                <div class="form-group">
+                    <label for="a-hero-image">Hero Background Image (filename)</label>
+                    <input type="text" id="a-hero-image" placeholder="e.g. hero.jpg">
+                    <p class="hint">File in the images/ folder used as hero background</p>
+                </div>
+                <div class="form-group">
+                    <label for="a-note-image">Note Section Image (filename)</label>
+                    <input type="text" id="a-note-image" placeholder="e.g. couple-portrait.jpg">
+                    <p class="hint">Oval photo in the "A Note From Us" section</p>
+                </div>
+                <div class="form-group">
+                    <label for="a-celebration-image">Celebration Section Image (filename)</label>
+                    <input type="text" id="a-celebration-image" placeholder="e.g. venue.jpg">
+                    <p class="hint">Wide photo above the Ceremony & Reception cards</p>
+                </div>
+
+                <h3 style="font-family: var(--font-display); font-size: 0.95rem; color: var(--text-gold); margin: 24px 0 12px;">Gallery Images</h3>
+                <p class="hint" style="margin-bottom: 12px;">Enter filenames from the images/ folder, one per line</p>
+                <div class="form-group">
+                    <textarea id="a-gallery-images" rows="6" placeholder="image1.jpg&#10;image2.jpg&#10;image3.jpg"></textarea>
+                </div>
+
+                <h3 style="font-family: var(--font-display); font-size: 0.95rem; color: var(--text-gold); margin: 24px 0 12px;">Intro Slideshow Images</h3>
+                <p class="hint" style="margin-bottom: 12px;">Enter filenames for the opening slideshow (up to 5 images)</p>
+                <div class="form-group">
+                    <textarea id="a-intro-images" rows="4" placeholder="photo1.jpg&#10;photo2.jpg&#10;photo3.jpg"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Stats & Quick Actions -->
+        <div class="admin-sidebar">
+            <!-- RSVP Stats -->
+            <div class="card">
+                <h2 class="card-title">📊 RSVP Responses</h2>
+                <div class="stats-grid">
+                    <div class="stat-box accepted">
+                        <div class="stat-number" id="stat-accepted">0</div>
+                        <div class="stat-label">Accepted</div>
+                    </div>
+                    <div class="stat-box declined">
+                        <div class="stat-number" id="stat-declined">0</div>
+                        <div class="stat-label">Declined</div>
+                    </div>
+                </div>
+                <div class="stat-box" style="margin-bottom: 16px;">
+                    <div class="stat-number" id="stat-total">0</div>
+                    <div class="stat-label">Total Responses</div>
+                </div>
+                <button class="btn btn-danger" style="width: 100%;" onclick="resetRSVP()">Reset RSVP Counts</button>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <h2 class="card-title">⚡ Quick Actions</h2>
+                <a href="index.html" class="preview-link" style="width: 100%; justify-content: center;">
+                    👁 Preview Invitation
+                </a>
+                <br>
+                <button class="btn btn-outline" style="width: 100%; margin-top: 12px;" onclick="resetAllData()">Reset All Data</button>
+            </div>
+
+            <!-- Admin Password -->
+            <div class="card">
+                <h2 class="card-title">🔑 Access Info</h2>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">
+                    Password: <code style="color: var(--text-gold); background: var(--bg-input); padding: 2px 8px; border-radius: 3px;">wedding2026</code>
+                </p>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">
+                    Change the password in <code style="background: var(--bg-input); padding: 1px 4px; border-radius: 2px;">script.js</code> (ADMIN_PASSWORD constant)
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">Changes saved successfully!</div>
+
+    <script>
+        const STORAGE_KEY_DATA = 'wedding_admin_data';
+        const STORAGE_KEY_RSVP = 'wedding_rsvp_counts';
+
+        // Field mapping: formId → data key
+        const FIELD_MAP = {
+            'a-partner1': 'partner1',
+            'a-partner2': 'partner2',
+            'a-wedding-datetime': 'weddingDateTime',
+            'a-wedding-date-display': 'weddingDateDisplay',
+            'a-hero-venue': 'heroVenue',
+            'a-ceremony-date': 'ceremonyDate',
+            'a-ceremony-time': 'ceremonyTime',
+            'a-ceremony-venue': 'ceremonyVenue',
+            'a-ceremony-address': 'ceremonyAddress',
+            'a-ceremony-map': 'ceremonyMapLink',
+            'a-reception-date': 'receptionDate',
+            'a-reception-time': 'receptionTime',
+            'a-reception-venue': 'receptionVenue',
+            'a-reception-address': 'receptionAddress',
+            'a-reception-map': 'receptionMapLink',
+            'a-note-text': 'noteText',
+            'a-dress-code': 'dressCode',
+            'a-hero-image': 'heroImage',
+            'a-note-image': 'noteImage',
+            'a-celebration-image': 'celebrationImage',
+        };
+
+        // Load existing data on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFormData();
+            loadRSVPStats();
+        });
+
+        function getStoredData() {
+            try { return JSON.parse(localStorage.getItem(STORAGE_KEY_DATA)) || {}; }
+            catch { return {}; }
+        }
+
+        function loadFormData() {
+            const data = getStoredData();
+
+            // Populate text fields
+            Object.entries(FIELD_MAP).forEach(([formId, key]) => {
+                const el = document.getElementById(formId);
+                if (el && data[key]) el.value = data[key];
+            });
+
+            // Gallery images
+            if (data.galleryImages && data.galleryImages.length) {
+                document.getElementById('a-gallery-images').value = data.galleryImages.join('\n');
+            }
+
+            // Intro images
+            if (data.introImages && data.introImages.length) {
+                document.getElementById('a-intro-images').value = data.introImages.join('\n');
+            }
+        }
+
+        function saveAllData() {
+            const data = {};
+
+            // Collect text fields
+            Object.entries(FIELD_MAP).forEach(([formId, key]) => {
+                const el = document.getElementById(formId);
+                if (el && el.value.trim()) data[key] = el.value.trim();
+            });
+
+            // Gallery images
+            const galleryText = document.getElementById('a-gallery-images').value.trim();
+            if (galleryText) {
+                data.galleryImages = galleryText.split('\n').map(s => s.trim()).filter(Boolean);
+            }
+
+            // Intro images
+            const introText = document.getElementById('a-intro-images').value.trim();
+            if (introText) {
+                data.introImages = introText.split('\n').map(s => s.trim()).filter(Boolean);
+            }
+
+            localStorage.setItem(STORAGE_KEY_DATA, JSON.stringify(data));
+            showToast('Changes saved successfully!');
+        }
+
+        function loadRSVPStats() {
+            try {
+                const counts = JSON.parse(localStorage.getItem(STORAGE_KEY_RSVP)) || { accepted: 0, declined: 0 };
+                document.getElementById('stat-accepted').textContent = counts.accepted;
+                document.getElementById('stat-declined').textContent = counts.declined;
+                document.getElementById('stat-total').textContent = counts.accepted + counts.declined;
+            } catch {
+                document.getElementById('stat-accepted').textContent = '0';
+                document.getElementById('stat-declined').textContent = '0';
+                document.getElementById('stat-total').textContent = '0';
+            }
+        }
+
+        function resetRSVP() {
+            if (confirm('Reset all RSVP counts to zero? This cannot be undone.')) {
+                localStorage.setItem(STORAGE_KEY_RSVP, JSON.stringify({ accepted: 0, declined: 0 }));
+                loadRSVPStats();
+                showToast('RSVP counts reset.');
+            }
+        }
+
+        function resetAllData() {
+            if (confirm('Reset ALL admin data? This will clear all saved information.')) {
+                localStorage.removeItem(STORAGE_KEY_DATA);
+                location.reload();
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>
